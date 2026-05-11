@@ -1,8 +1,9 @@
 package com.example.todoapp;
-
+import java.util.Optional;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Data Access Object for {@link Task} model.
@@ -17,6 +18,25 @@ public class TaskDao {
         save(new Task(3, "Choisir mon parcours de 4A", "SIR ou SIA ?", false));
     }
 
+    public List<Task> findAll() {
+        return new ArrayList<>(storage.values());
+    }
+
+    public List<Task> findAllTodoOnly() {
+        return storage.values().stream()
+                .filter(task -> !task.done())
+                .toList();
+    }
+
+    public boolean deleteById(int id) {
+        return storage.remove(id) != null;
+    }
+
+    public boolean update(int id, Task input) {
+        if (!storage.containsKey(id)) return false;
+        storage.put(id, new Task(id, input.title(), input.description(), input.done()));
+        return true;
+    }
     /**
      * Persist {@link Task} model.
      * @param task task to save.
