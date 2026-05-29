@@ -1,4 +1,4 @@
 package com.example.todoapp.business.model;
 
-public class TasksModel {
+public record TasksModel(Integer id, String title, String description, boolean done) {
 }

@@ -2,7 +2,7 @@ package com.example.todoapp.presentation;
 
 import com.example.todoapp.JsonUtils;
 import com.example.todoapp.Task;
-import com.example.todoapp.TaskDao;
+import com.example.todoapp.business.service.TasksService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.slf4j.Logger;
@@ -22,11 +22,12 @@ public class TasksController implements HttpHandler {
     private static final Logger log =
             LoggerFactory.getLogger(TasksController.class);
 
-    private static final TaskDao dao = new TaskDao();
+    private static final TasksService tasksService = new TasksService();
 
     private static final Pattern ID_PATH =
             Pattern.compile("^/tasks/([0-9]+)$");
 
+    @Override
     public void handle(HttpExchange exchange) throws IOException {
 
         String method = exchange.getRequestMethod();
@@ -43,7 +44,7 @@ public class TasksController implements HttpHandler {
 
             Task input = JsonUtils.deserialize(body, Task.class);
 
-            Task created = dao.save(input);
+            Task created = tasksService.createTask(input);
 
             exchange.getResponseHeaders().add(
                     "Location",
@@ -59,7 +60,7 @@ public class TasksController implements HttpHandler {
 
             int id = Integer.parseInt(m.group(1));
 
-            Optional<Task> task = dao.findById(id);
+            Optional<Task> task = tasksService.getTaskById(id);
 
             if (task.isPresent()) {
                 sendResponse(exchange, 200, JsonUtils.serialize(task.get()));
@@ -77,9 +78,7 @@ public class TasksController implements HttpHandler {
 
             boolean todoOnly = nonNull(query) && query.contains("todo-only=true");
 
-            var tasks = todoOnly
-                    ? dao.findAllTodoOnly()
-                    : dao.findAll();
+            var tasks = tasksService.getAllTasks(todoOnly);
 
             if (tasks.isEmpty()) {
                 sendResponse(exchange, 204, null);
@@ -95,7 +94,7 @@ public class TasksController implements HttpHandler {
 
             int id = Integer.parseInt(m.group(1));
 
-            boolean deleted = dao.deleteById(id);
+            boolean deleted = tasksService.deleteTask(id);
 
             sendResponse(exchange, deleted ? 204 : 404, null);
             return;
@@ -110,7 +109,7 @@ public class TasksController implements HttpHandler {
 
             Task input = JsonUtils.deserialize(body, Task.class);
 
-            boolean updated = dao.update(id, input);
+            boolean updated = tasksService.updateTask(id, input);
 
             sendResponse(exchange, updated ? 204 : 404, null);
             return;
@@ -120,7 +119,6 @@ public class TasksController implements HttpHandler {
         sendResponse(exchange, 404, null);
     }
 
-    // ================= RESPONSE HELPER =================
     private void sendResponse(HttpExchange exchange, int status, String json)
             throws IOException {
 
