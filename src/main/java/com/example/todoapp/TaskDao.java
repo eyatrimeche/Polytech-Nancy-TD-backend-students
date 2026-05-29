@@ -43,7 +43,7 @@ public class TaskDao {
      * @return task model.
      */
     public Task save(Task task) {
-        storage.put(task.id(), task);
+        storage.putIfAbsent(task.id(), task);
         return task;
     }
 
