@@ -1,4 +1,5 @@
 package com.example.todoapp;
+
 import java.util.Optional;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +9,12 @@ import java.util.List;
 /**
  * Data Access Object for {@link Task} model.
  */
+@SuppressWarnings({
+        "unused",
+        "MismatchedQueryAndUpdateOfCollection",
+        "UnusedReturnValue",
+        "SameParameterValue"
+})
 public class TaskDao {
 
     private final Map<Integer, Task> storage = new HashMap<>();
@@ -37,14 +44,14 @@ public class TaskDao {
         storage.put(id, new Task(id, input.title(), input.description(), input.done()));
         return true;
     }
+
     /**
      * Persist {@link Task} model.
+     *
      * @param task task to save.
-     * @return task model.
      */
-    public Task save(Task task) {
+    public void save(Task task) {
         storage.putIfAbsent(task.id(), task);
-        return task;
     }
 
     /**

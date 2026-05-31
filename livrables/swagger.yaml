@@ -2,8 +2,7 @@ openapi: 3.0.3
 info:
     title: TODO API
     version: 1.0.0
-    description: >
-        API de gestion d'une TODO List.
+    description: API de gestion d'une TODO List.
 servers:
     -   url: http://localhost:8080
         description: Serveur local de développement
@@ -23,7 +22,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Task'
+                            $ref: '#/components/schemas/TasksRequestDto'
             responses:
                 '201':
                     description: Tâche créée avec succès
@@ -36,7 +35,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Task'
+                                $ref: '#/components/schemas/TasksResponseDto'
+                '400':
+                    description: Données invalides (titre manquant/trop long ou description trop longue)
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ValidationErrorDto'
         get:
             tags: [ tasks ]
             summary: Récupérer toutes les tâches
@@ -55,7 +60,7 @@ paths:
                             schema:
                                 type: array
                                 items:
-                                    $ref: '#/components/schemas/Task'
+                                    $ref: '#/components/schemas/TasksResponseDto'
                 '204':
                     description: Aucune tâche trouvée
 
@@ -79,7 +84,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Task'
+                                $ref: '#/components/schemas/TasksResponseDto'
                 '404':
                     description: Tâche non trouvée
         put:
@@ -91,10 +96,16 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Task'
+                            $ref: '#/components/schemas/TasksUpdateRequestDto'
             responses:
                 '204':
                     description: Tâche mise à jour avec succès
+                '400':
+                    description: Données invalides (titre manquant/trop long ou description trop longue)
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ValidationErrorDto'
                 '404':
                     description: Tâche non trouvée
         delete:
@@ -109,25 +120,76 @@ paths:
 
 components:
     schemas:
-        Task:
+        TasksRequestDto:
             type: object
-            description: Représentation d'une tâche
+            description: Données requises pour créer une tâche
+            properties:
+                title:
+                    type: string
+                    maxLength: 50
+                    example: Acheter du lait
+                description:
+                    type: string
+                    maxLength: 255
+                    nullable: true
+                    example: 2L demi-écrémé
+            required:
+                - title
+
+        TasksUpdateRequestDto:
+            type: object
+            description: Données requises pour modifier une tâche
+            properties:
+                title:
+                    type: string
+                    maxLength: 50
+                    example: Acheter du lait
+                description:
+                    type: string
+                    maxLength: 255
+                    nullable: true
+                    example: 2L demi-écrémé
+                done:
+                    type: boolean
+                    example: true
+            required:
+                - title
+                - done
+
+        TasksResponseDto:
+            type: object
+            description: Représentation d'une tâche renvoyée par l'API
             properties:
                 id:
                     type: integer
                     example: 1
                 title:
                     type: string
-                    nullable: false
+                    maxLength: 50
                     example: Acheter du lait
                 description:
                     type: string
+                    maxLength: 255
                     nullable: true
                     example: 2L demi-écrémé
                 done:
                     type: boolean
-                    nullable: false
                     example: false
             required:
                 - id
                 - title
+                - done
+
+        ValidationErrorDto:
+            type: object
+            description: Détail d'une erreur de validation (Code 400)
+            properties:
+                field:
+                    type: string
+                    example: title
+                description:
+                    type: string
+                    example: Title size maximum is 50 characters
+            required:
+                - field
+                - description
