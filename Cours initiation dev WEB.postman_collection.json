@@ -1,0 +1,138 @@
+{
+  "info": {
+    "_postman_id": "83460207-17d1-4068-b0de-df19f623eeb2",
+    "name": "Cours initiation dev WEB",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54712665",
+    "_collection_link": "https://go.postman.co/collection/54712665-83460207-17d1-4068-b0de-df19f623eeb2?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "GET /tasks/1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/tasks/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/tasks",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/tasks",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Acheter du lait\",\r\n  \"description\": \"2L demi-écrémé\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/tasks/1",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Acheter du lait bio\",\r\n  \"description\": \"2L au supermarché\",\r\n  \"done\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/tasks/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/tasks/1",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/tasks/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    }
+  ]
+}
